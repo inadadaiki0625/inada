@@ -29,12 +29,10 @@ public class CalculateSales {
 		BufferedReader br = null;
 		if (readFile(args[0], "branch.lst", "支店", branchmap, mapa, "^\\d{3}$")) {
 		} else {
-			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
 		if (readFile(args[0], "commodity.lst", "商品", commoditymap, mapb, "^[A-Za-z0-9]{8}$")) {
 		} else {
-			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
 
@@ -136,12 +134,10 @@ public class CalculateSales {
 		}
 		if (outPut(args[0], "branch.out", branchmap, mapa)) {
 		} else {
-			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
 		if (outPut(args[0], "commodity.out", commoditymap, mapb)) {
 		} else {
-			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
 	}
