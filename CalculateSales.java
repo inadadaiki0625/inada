@@ -42,14 +42,14 @@ public class CalculateSales {
 					if (branchitems[0].matches("^\\d{3}$")) {
 					} else {
 						// 支店コードが不正な場合
-						System.out.println("支店定義ファイルのフォーマット不正です");
+						System.out.println("支店定義ファイルのフォーマットが不正です");
 						return;
 					}
 					// branchitemsの要素数が2つか調べる
 					if (branchitems.length == 2) {
 					} else {
 						// 要素数が2つ以外だった場合
-						System.out.println("支店定義ファイルのフォーマット不正です");
+						System.out.println("支店定義ファイルのフォーマットが不正です");
 						return;
 					}
 					// 分けた内容をbranchmapに持たせる
@@ -163,9 +163,16 @@ public class CalculateSales {
 					// アレイリスト2にファイルの中身を一行入れる
 					array2.add(str);
 				}
+				//アレイリスト2の中身が3行かを確認
 				if (array2.size() == 3) {
 				} else {
-					System.out.println(array1.get(i).getName() + "のファイルのフォーマットが不正です");
+					System.out.println(array1.get(i).getName() + "のフォーマットが不正です");
+					return;
+				}
+				//アレイリスト2の金額の場所に数字以外が入っていないかを確認
+				if(array2.get(2).matches("^[0-9]*$")){
+				}else{
+					System.out.println("予期せぬエラーが発生しました");
 					return;
 				}
 				// array2の金額をlong1型に変換する
@@ -174,7 +181,7 @@ public class CalculateSales {
 				if (mapa.get(array2.get(0)) != null) {
 				} else {
 					// 支店コードが正しくなかった場合
-					System.out.println(array1.get(i).getName() + "のファイルの支店コードが不正です");
+					System.out.println(array1.get(i).getName() + "の支店コードが不正です");
 					return;
 				}
 				// mapaに支店ごとの売上を合計していく
@@ -188,7 +195,7 @@ public class CalculateSales {
 				}
 				if (mapb.get(array2.get(1)) != null) {
 				} else {
-					System.out.println(array1.get(i).getName() + "のファイルの商品コードが不正です");
+					System.out.println(array1.get(i).getName() + "の商品コードが不正です");
 					return;
 				}
 				// mapbに商品ごとの売上を合計していく
