@@ -20,7 +20,6 @@ public class CalculateSales {
 		if (args.length != 1) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
-
 		}
 		HashMap<String, String> branchmap = new HashMap<String, String>();
 		HashMap<String, String> commoditymap = new HashMap<String, String>();
@@ -32,56 +31,60 @@ public class CalculateSales {
 		BufferedWriter bw = null;
 		try {
 			File file = new File(args[0], "branch.lst");
-			br = new BufferedReader(new FileReader(file));
-			// １行づつファイルを読み込む
-			String s = br.readLine();
-			// nullになるまで読み込みを繰り返す
-			while (s != null) {
-				// , で読み込んだ内容を分ける
-				String[] branchitems = s.split(",");
-				// 支店コードが3桁の数字か確認する
-				if (branchitems[0].matches("^\\d{3}$")) {
-				} else {
-					// 支店コードが不正な場合
-					System.out.println("支店定義ファイルのフォーマット不正です");
-					return;
+			if (file.exists()) {
+				br = new BufferedReader(new FileReader(file));
+				String s;
+				// nullになるまで読み込みを繰り返す
+				while ((s= br.readLine()) != null) {
+					// , で読み込んだ内容を分ける
+					String[] branchitems = s.split(",");
+					// 支店コードが3桁の数字か確認する
+					if (branchitems[0].matches("^\\d{3}$")) {
+					} else {
+						// 支店コードが不正な場合
+						System.out.println("支店定義ファイルのフォーマット不正です");
+						return;
+					}
+					// branchitemsの要素数が2つか調べる
+					if (branchitems.length == 2) {
+					} else {
+						// 要素数が2つ以外だった場合
+						System.out.println("支店定義ファイルのフォーマット不正です");
+						return;
+					}
+					// 分けた内容をbranchmapに持たせる
+					branchmap.put(branchitems[0], branchitems[1]);
+					// 0をLong型に変換する
+					int i = 0;
+					long l = i;
+					// 支店コードと売上額 0円をmapaに持たせる
+					mapa.put(branchitems[0], l);
 				}
-				// branchitemsの要素数が2つか調べる
-				if (branchitems.length == 2) {
-				} else {
-					// 要素数が2つ以外だった場合
-					System.out.println("支店定義ファイルのフォーマット不正です");
-					return;
-				}
-				// 分けた内容をbranchmapに持たせる
-				branchmap.put(branchitems[0], branchitems[1]);
-				// 0をLong型に変換する
-				int i = 0;
-				long l = i;
-				// 支店コードと売上額 0円をmapaに持たせる
-				mapa.put(branchitems[0], l);
-				s = br.readLine();
+			} else {
+				System.out.println("支店定義ファイルが存在しません");
+				return;
 			}
 		} catch (IOException e) {
 			// ファイルが存在しない場合
-			System.out.println("支店定義ファイルが存在しません");
+			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			if (br != null)
 				try {
 					br.close(); // 読み込みを終了する
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("予期せぬエラーが発生しました");
 				}
 		}
 
 		// 2,商品定義ファイルの読み込み
 		try {
 			File file = new File(args[0], "commodity.lst");
+			if (file.exists()) {
 			br = new BufferedReader(new FileReader(file));
-			// １行づつファイルを読み込む
-			String s = br.readLine();
+			String s;
 			// nullになるまで読み込みを繰り返す
-			while (s != null) {
+			while ((s = br.readLine()) != null) {
 				// , で読み込んだ内容を分ける
 				String[] commodityitems = s.split(",");
 				if (commodityitems[0].matches("^[A-Za-z0-9]{8}$")) {
@@ -104,17 +107,22 @@ public class CalculateSales {
 				long l = i;
 				// 商品コードと売上額 0円をmapbに持たせる
 				mapb.put(commodityitems[0], l);
-				s = br.readLine();
+				}
+			} else {
+				System.out.println("商品定義ファイルが存在しません");
+				return;
 			}
 		} catch (IOException e) {
 			// ファイルが存在しない場合の処理
-			System.out.println("商品定義ファイルが存在しません");
+			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			if (br != null)
 				try {
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("予期せぬエラーが発生しました");
+					return;
 				}
 		}
 		// 3,集計
@@ -194,6 +202,7 @@ public class CalculateSales {
 			}
 		} catch (IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			if (br != null)
 				try {
@@ -201,7 +210,7 @@ public class CalculateSales {
 					br.close();
 				} catch (IOException e) {
 					System.out.println("予期せぬエラーが発生しました");
-					e.printStackTrace();
+					return;
 				}
 		}
 		// 4,集計結果結果出力
@@ -218,7 +227,6 @@ public class CalculateSales {
 		try {
 			File file = new File(args[0], "branch.out");
 			bw = new BufferedWriter(new FileWriter(file));
-
 			for (Entry<String, Long> s : entriesa) {
 				// 支店コード、支店名、売上額をbranch.outファイルに出力する
 				bw.write(s.getKey() + "," + branchmap.get(s.getKey()) + "," + s.getValue() + sep);
@@ -232,8 +240,8 @@ public class CalculateSales {
 				try {
 					bw.close(); // 出力を終了する
 				} catch (IOException e) {
-					e.printStackTrace();
 					System.out.println("予期せぬエラーが発生しました");
+					return;
 				}
 		}
 		// 商品集計結果結果出力
@@ -262,8 +270,8 @@ public class CalculateSales {
 					// 出力を終了する
 					bw.close();
 				} catch (IOException e) {
-					e.printStackTrace();
 					System.out.println("予期せぬエラーが発生しました");
+					return;
 				}
 		}
 	}
